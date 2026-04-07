@@ -12,17 +12,13 @@ const mode = process.env.NODE_ENV;
 const production = mode === 'production';
 
 const preprocess = sveltePreprocess({
-	postcss:  {
-		plugins: [
-			require('postcss-import'),
-			require('tailwindcss'),
-			require('autoprefixer'),
-			...(production ? [require('postcss-clean')] : []),
-		],
-	},
-	defaults: {
-		style: 'postcss',
-	},
+  postcss: {
+    plugins: [
+      require('postcss-import')(),
+      require('tailwindcss'),
+      require('autoprefixer'),
+    ]
+  }
 });
 
 export default {
