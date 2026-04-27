@@ -1,0 +1,1 @@
+export { timer, timerRunning } from './_core.js';

@@ -1,0 +1,1 @@
+export { modal as default, modal, modalData } from './_core.js';
