@@ -303,10 +303,12 @@ function stopTimerTick() {
 
 function syncCurrentBoard() {
 	if (!currentGame) return;
-	userGridState.set(currentGame.getSudoku().getGrid());
 	canUndo.set(currentGame.canUndo());
 	canRedo.set(currentGame.canRedo());
 	syncExploreState();
+	if (!currentGame.isExploreActive()) {
+		userGridState.set(currentGame.getSudoku().getGrid());
+	}
 	updateGameWon();
 }
 

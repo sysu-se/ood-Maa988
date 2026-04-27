@@ -323,17 +323,32 @@ function applySessionMove(session, move) {
 	return session.sudoku
 }
 
+function syncExploreFailureState(session) {
+	if (session.sudoku.getInvalidCells().length === 0) {
+		session.failed = false
+		session.reason = ''
+		return
+	}
+
+	session.failed = true
+	if (!session.reason) {
+		session.reason = '探索出现冲突'
+	}
+}
+
 function undoSessionMove(session) {
 	if (session.undoStack.length === 0) return
 	const entry = session.undoStack.pop()
 	if (entry.type === 'move') {
 		session.sudoku.guess({ row: entry.move.row, col: entry.move.col, value: entry.move.oldValue })
 		session.redoStack.push(entry)
+		syncExploreFailureState(session)
 		return
 	}
 	if (entry.type === 'snapshot') {
 		session.sudoku = restoreSudoku(entry.before)
 		session.redoStack.push(entry)
+		syncExploreFailureState(session)
 	}
 }
 
@@ -343,11 +358,13 @@ function redoSessionMove(session) {
 	if (entry.type === 'move') {
 		session.sudoku.guess({ row: entry.move.row, col: entry.move.col, value: entry.move.newValue })
 		session.undoStack.push(entry)
+		syncExploreFailureState(session)
 		return
 	}
 	if (entry.type === 'snapshot') {
 		session.sudoku = restoreSudoku(entry.after)
 		session.undoStack.push(entry)
+		syncExploreFailureState(session)
 	}
 }
 
@@ -397,6 +414,7 @@ export function createGame({ sudoku, undoStack = [], redoStack = [], exploreStat
 			reason: exploreSession.reason,
 			startHash: exploreSession.startHash,
 			currentHash,
+			invalidCells: exploreSession.sudoku.getInvalidCells(),
 			canUndo: exploreSession.undoStack.length > 0,
 			canRedo: exploreSession.redoStack.length > 0,
 			depth: exploreSession.undoStack.length,

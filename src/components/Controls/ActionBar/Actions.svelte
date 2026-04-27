@@ -30,13 +30,7 @@
 	function enterExplore() {
 		if ($gamePaused) return;
 
-		if (!game.isExploreActive()) {
-			game.startExplore();
-		}
-
-		if (game.isExploreActive()) {
-			modal.show('explore');
-		}
+		game.startExplore();
 	}
 </script>
 

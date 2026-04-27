@@ -6,7 +6,6 @@ import prompt from './Prompt.svelte';
 import welcome from './Welcome.svelte';
 import gameover from './GameOver.svelte';
 import hint from './Hint.svelte';
-import explore from './Explore.svelte';
 
 export default {
 	share,
@@ -16,6 +15,5 @@ export default {
 	prompt,
 	welcome,
 	gameover,
-	hint,
-	explore
+	hint
 }

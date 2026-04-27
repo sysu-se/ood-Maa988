@@ -6,9 +6,27 @@
 
 	// TODO: Improve keyboardDisabled
 	import { keyboardDisabled } from '@sudoku/stores/keyboard';
+	import game from '@sudoku/game';
 
 	function handleKeyButton(num) {
 		if (!$keyboardDisabled) {
+			if (game.isExploreActive()) {
+				if ($notes) {
+					if (num === 0) {
+						candidates.clear($cursor);
+					} else {
+						candidates.add($cursor, num);
+					}
+				} else {
+					if (num === 0) {
+						game.undo();
+					} else {
+						game.exploreGuess({ row: $cursor.y, col: $cursor.x, value: num });
+					}
+				}
+				return;
+			}
+
 			if ($notes) {
 				if (num === 0) {
 					candidates.clear($cursor);
